@@ -6,7 +6,6 @@ class Landing(QtWidgets.QWidget):
         super().__init__()
         uic.loadUi('landing.ui', self)
         self.setWindowTitle("Yomimate")
-        # self.selectImageButton.clicked.connect(self.openFileNameDialog)
 
     def openFileNameDialog(self) -> str:
         options = QtWidgets.QFileDialog.Options()
