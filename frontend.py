@@ -18,11 +18,6 @@ class Landing(QtWidgets.QWidget):
         if fileName:
             return fileName
 
-    def switchUi(self):
-        uic.loadUi(TEMPLATE_PATH+'another.ui', self)
-        self.show()
-        self.setWindowTitle("you\'re winner")
-
 class OCRPage(QtWidgets.QWidget):
     def __init__(self):
         super().__init__()
