@@ -57,6 +57,19 @@
        </property>
       </widget>
      </item>
+     <item row="3" column="0">
+      <widget class="QTextEdit" name="ocrOutputLabel">
+       <property name="readOnly">
+        <bool>true</bool>
+       </property>
+       <property name="textInteractionFlags">
+        <set>Qt::TextSelectableByMouse</set>
+       </property>
+       <property name="placeholderText">
+        <string>Please wait... Yomimate is scanning your image!</string>
+       </property>
+      </widget>
+     </item>
      <item row="1" column="0">
       <widget class="QScrollArea" name="scrollArea">
        <property name="sizePolicy">
@@ -120,23 +133,17 @@
        </property>
       </widget>
      </item>
-     <item row="3" column="0">
-      <widget class="QTextEdit" name="ocrOutputLabel">
-       <property name="readOnly">
-        <bool>true</bool>
-       </property>
-       <property name="textInteractionFlags">
-        <set>Qt::TextSelectableByMouse</set>
-       </property>
-       <property name="placeholderText">
-        <string>Please wait... Yomimate is scanning your image!</string>
-       </property>
-      </widget>
-     </item>
      <item row="4" column="0">
       <widget class="QLabel" name="helpText">
        <property name="text">
         <string>Select one or more characters to see their meaning!</string>
+       </property>
+      </widget>
+     </item>
+     <item row="5" column="0">
+      <widget class="QLabel" name="translation">
+       <property name="text">
+        <string>TextLabel</string>
        </property>
       </widget>
      </item>

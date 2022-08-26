@@ -31,6 +31,7 @@ class Frontend(QtWidgets.QStackedWidget):
     landing: Landing
     ocrPage: OCRPage
     reader: YomimateOCR
+    result: str
 
     def __init__(self):
         super().__init__()
@@ -43,9 +44,14 @@ class Frontend(QtWidgets.QStackedWidget):
 
     def handleImage(self):
         fileLocation = self.landing.openFileNameDialog()
-        self.switchToOCRPage(fileLocation)
-        extractedText = self.readImage(fileLocation)
-        self.ocrPage.ocrOutputLabel.setText(extractedText)
+        try:
+            self.landing.label_2.setText("Please wait... Yomimate is scanning your image!")
+            extractedText = self.readImage(fileLocation)
+            self.ocrPage.ocrOutputLabel.setText(extractedText)
+            self.ocrPage.ocrOutputLabel.selectionChanged.connect(self.handleSelection)
+            self.switchToOCRPage(fileLocation)
+        except:
+            self.landing.label_2.setText("Oh no! something went wrong.")
 
     def switchToOCRPage(self, fileLocation: str):
         self.setCurrentIndex(1)
@@ -55,10 +61,17 @@ class Frontend(QtWidgets.QStackedWidget):
         img = QtGui.QPixmap(fileLocation)
         self.ocrPage.outImage.resize(img.width(), img.height())
         self.ocrPage.outImage.setPixmap(img)
+    
+    def handleSelection(self):
+        cursor = self.ocrPage.ocrOutputLabel.textCursor()
+        # self.ocrPage.translation.setText("Selection start: %d end: %d" % 
+        #    (cursor.selectionStart(), cursor.selectionEnd()))
+        self.ocrPage.translation.setText(self.result[cursor.selectionStart():cursor.selectionEnd()])
 
     def readImage(self, fileLocation: str) -> str:
         self.reader.readImage(fileLocation)
-        return self.reader.getText()
+        self.result = self.reader.getText()
+        return self.result
 
     """ 
     window centering function taken from:
