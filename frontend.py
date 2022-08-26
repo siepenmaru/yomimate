@@ -24,6 +24,11 @@ class Another(QtWidgets.QWidget):
         super().__init__()
         uic.loadUi('another.ui', self)
 
+class OCROutput(QtWidgets.QWidget):
+    def __init__(self):
+        super().__init__()
+        uic.loadUi('ocr.ui', self)
+
 
 class Frontend(QtWidgets.QStackedWidget):
     landing: Landing
