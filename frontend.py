@@ -1,6 +1,7 @@
 import sys
 from PyQt5 import QtCore, QtGui, QtWidgets, uic
 from ocr import YomimateOCR
+from dictionary import YomiDict
 
 TEMPLATE_PATH = "templates/"
 
@@ -32,10 +33,12 @@ class Frontend(QtWidgets.QStackedWidget):
     ocrPage: OCRPage
     reader: YomimateOCR
     result: str
+    yomiDict: YomiDict
 
     def __init__(self):
         super().__init__()
         self.reader = YomimateOCR('ja', False)
+        self.yomiDict = YomiDict()
         self.landing = Landing()
         self.ocrPage = OCRPage()
         self.addWidget(self.landing)
@@ -64,9 +67,25 @@ class Frontend(QtWidgets.QStackedWidget):
     
     def handleSelection(self):
         cursor = self.ocrPage.ocrOutputLabel.textCursor()
-        # self.ocrPage.translation.setText("Selection start: %d end: %d" % 
-        #    (cursor.selectionStart(), cursor.selectionEnd()))
-        self.ocrPage.translation.setText(self.result[cursor.selectionStart():cursor.selectionEnd()])
+        selection = self.result[cursor.selectionStart():cursor.selectionEnd()]
+        self.displaySelectionInfo(selection)
+
+    def displaySelectionInfo(self, selection: str):
+        try:
+            self.yomiDict.updateLookup(selection)
+        except:
+            return
+
+        entries = self.yomiDict.get_entries()
+
+        if not entries:
+            self.ocrPage.translation.setText("Uh oh! Yomimate couldn't find an entry for that selection.")
+            return
+
+        out = ""
+        for entry in entries:
+            out += str(entry) + '\n'
+        self.ocrPage.translation.setText(out)
 
     def readImage(self, fileLocation: str) -> str:
         self.reader.readImage(fileLocation)
