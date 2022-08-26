@@ -17,25 +17,25 @@ class YomiDict(jamdict.Jamdict):
     def updateLookup(self, input: str) -> None:
         self.lookupResult = self.lookup(input)
 
-    def get_entries(self) -> list[jamdict.util.LookupResult]:
+    def getEntries(self) -> list[jamdict.util.LookupResult]:
         entries = []
         for entry in self.lookupResult.entries:
             entries.append(entry)
         return entries
 
-    def get_entry_dicts(self) -> list[dict]:
+    def getEntryDicts(self) -> list[dict]:
         entryDicts = []
         for entry in self.lookupResult.entries:
             entry.append(entry.to_dict())
         return entryDicts
     
-    def get_related(self) -> list[jamdict.util.Character]:
+    def getRelated(self) -> list[jamdict.util.Character]:
         entries = []
         for ch in self.lookupResult.chars:
             entries.append(ch)
         return entries
 
-    def to_romaji(self, original: str) -> str:
+    def toRomaji(self, original: str) -> str:
         result = self.kks.convert(original)
         out = ''
         for item in result:

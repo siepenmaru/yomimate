@@ -76,7 +76,7 @@ class Frontend(QtWidgets.QStackedWidget):
         except:
             return
 
-        entries = self.yomiDict.get_entries()
+        entries = self.yomiDict.getEntries()
 
         if not entries:
             self.ocrPage.translation.setText("Uh oh! Yomimate couldn't find an entry for that selection.")
