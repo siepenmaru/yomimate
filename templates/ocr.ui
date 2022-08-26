@@ -7,94 +7,141 @@
     <x>0</x>
     <y>0</y>
     <width>1128</width>
-    <height>883</height>
+    <height>882</height>
    </rect>
   </property>
   <property name="windowTitle">
    <string>Results</string>
   </property>
-  <widget class="QLabel" name="imageInfoLabel">
+  <widget class="QScrollArea" name="scrollArea_2">
    <property name="geometry">
     <rect>
-     <x>0</x>
-     <y>10</y>
-     <width>1121</width>
-     <height>41</height>
+     <x>9</x>
+     <y>6</y>
+     <width>1111</width>
+     <height>631</height>
     </rect>
    </property>
-   <property name="text">
-    <string>Your Image:</string>
+   <property name="sizePolicy">
+    <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+     <horstretch>0</horstretch>
+     <verstretch>0</verstretch>
+    </sizepolicy>
    </property>
-   <property name="alignment">
-    <set>Qt::AlignCenter</set>
+   <property name="minimumSize">
+    <size>
+     <width>0</width>
+     <height>0</height>
+    </size>
    </property>
-  </widget>
-  <widget class="QLabel" name="label">
-   <property name="geometry">
-    <rect>
-     <x>20</x>
-     <y>470</y>
-     <width>121</width>
-     <height>22</height>
-    </rect>
-   </property>
-   <property name="text">
-    <string>Yomimate saw:</string>
-   </property>
-  </widget>
-  <widget class="QTextEdit" name="ocrOutputLabel">
-   <property name="geometry">
-    <rect>
-     <x>20</x>
-     <y>510</y>
-     <width>1081</width>
-     <height>171</height>
-    </rect>
-   </property>
-   <property name="readOnly">
+   <property name="widgetResizable">
     <bool>true</bool>
    </property>
-   <property name="textInteractionFlags">
-    <set>Qt::TextSelectableByMouse</set>
-   </property>
-   <property name="placeholderText">
-    <string/>
-   </property>
-  </widget>
-  <widget class="QLabel" name="outImage">
-   <property name="geometry">
-    <rect>
-     <x>20</x>
-     <y>70</y>
-     <width>1081</width>
-     <height>371</height>
-    </rect>
-   </property>
-   <property name="text">
-    <string/>
-   </property>
-   <property name="pixmap">
-    <pixmap>../images/chainsawman.jpeg</pixmap>
-   </property>
-   <property name="scaledContents">
-    <bool>false</bool>
-   </property>
-   <property name="wordWrap">
-    <bool>false</bool>
-   </property>
-  </widget>
-  <widget class="QLabel" name="helpText">
-   <property name="geometry">
-    <rect>
-     <x>20</x>
-     <y>690</y>
-     <width>371</width>
-     <height>31</height>
-    </rect>
-   </property>
-   <property name="text">
-    <string>Select one or more characters to see their meaning!</string>
-   </property>
+   <widget class="QWidget" name="scrollAreaWidgetContents_2">
+    <property name="geometry">
+     <rect>
+      <x>0</x>
+      <y>0</y>
+      <width>1107</width>
+      <height>627</height>
+     </rect>
+    </property>
+    <layout class="QGridLayout" name="gridLayout">
+     <item row="0" column="0">
+      <widget class="QLabel" name="imageInfoLabel">
+       <property name="text">
+        <string>Your Image:</string>
+       </property>
+       <property name="alignment">
+        <set>Qt::AlignCenter</set>
+       </property>
+      </widget>
+     </item>
+     <item row="1" column="0">
+      <widget class="QScrollArea" name="scrollArea">
+       <property name="sizePolicy">
+        <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
+       </property>
+       <property name="minimumSize">
+        <size>
+         <width>1081</width>
+         <height>401</height>
+        </size>
+       </property>
+       <property name="verticalScrollBarPolicy">
+        <enum>Qt::ScrollBarAsNeeded</enum>
+       </property>
+       <property name="widgetResizable">
+        <bool>true</bool>
+       </property>
+       <property name="alignment">
+        <set>Qt::AlignCenter</set>
+       </property>
+       <widget class="QWidget" name="scrollAreaWidgetContents">
+        <property name="geometry">
+         <rect>
+          <x>-236</x>
+          <y>-218</y>
+          <width>1292</width>
+          <height>732</height>
+         </rect>
+        </property>
+        <layout class="QGridLayout" name="gridLayout_2">
+         <item row="0" column="0">
+          <widget class="QLabel" name="outImage">
+           <property name="text">
+            <string/>
+           </property>
+           <property name="pixmap">
+            <pixmap>../images/chainsawman.jpeg</pixmap>
+           </property>
+           <property name="scaledContents">
+            <bool>false</bool>
+           </property>
+           <property name="alignment">
+            <set>Qt::AlignCenter</set>
+           </property>
+           <property name="wordWrap">
+            <bool>false</bool>
+           </property>
+          </widget>
+         </item>
+        </layout>
+       </widget>
+      </widget>
+     </item>
+     <item row="2" column="0">
+      <widget class="QLabel" name="label">
+       <property name="text">
+        <string>Yomimate saw:</string>
+       </property>
+      </widget>
+     </item>
+     <item row="3" column="0">
+      <widget class="QTextEdit" name="ocrOutputLabel">
+       <property name="readOnly">
+        <bool>true</bool>
+       </property>
+       <property name="textInteractionFlags">
+        <set>Qt::TextSelectableByMouse</set>
+       </property>
+       <property name="placeholderText">
+        <string>Please wait... Yomimate is scanning your image!</string>
+       </property>
+      </widget>
+     </item>
+     <item row="4" column="0">
+      <widget class="QLabel" name="helpText">
+       <property name="text">
+        <string>Select one or more characters to see their meaning!</string>
+       </property>
+      </widget>
+     </item>
+    </layout>
+   </widget>
   </widget>
  </widget>
  <resources>

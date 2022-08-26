@@ -1,6 +1,6 @@
 import sys
 from PyQt5 import QtCore, QtGui, QtWidgets, uic
-from ocr import OCR
+from ocr import YomimateOCR
 
 TEMPLATE_PATH = "templates/"
 
@@ -30,9 +30,11 @@ class OCRPage(QtWidgets.QWidget):
 class Frontend(QtWidgets.QStackedWidget):
     landing: Landing
     ocrPage: OCRPage
+    reader: YomimateOCR
 
     def __init__(self):
         super().__init__()
+        self.reader = YomimateOCR('ja', False)
         self.landing = Landing()
         self.ocrPage = OCRPage()
         self.addWidget(self.landing)
@@ -40,17 +42,24 @@ class Frontend(QtWidgets.QStackedWidget):
         self.landing.selectImageButton.clicked.connect(self.handleImage)
 
     def handleImage(self):
-        name = self.landing.openFileNameDialog()
-        self.switchToOCRPage()
+        fileLocation = self.landing.openFileNameDialog()
+        self.switchToOCRPage(fileLocation)
+        extractedText = self.readImage(fileLocation)
+        self.ocrPage.ocrOutputLabel.setText(extractedText)
 
-    def switchToOCRPage(self):
+    def switchToOCRPage(self, fileLocation: str):
         self.setCurrentIndex(1)
         self.resize(1128, 883)
         self.centerWindow()
         self.setWindowTitle("you\'re winner")
-        self.ocrPage.ocrOutputLabel.setText("Lorem Ipsum Dolor Something Something")
+        img = QtGui.QPixmap(fileLocation)
+        self.ocrPage.outImage.resize(img.width(), img.height())
+        self.ocrPage.outImage.setPixmap(img)
 
-    
+    def readImage(self, fileLocation: str) -> str:
+        self.reader.readImage(fileLocation)
+        return self.reader.getText()
+
     """ 
     window centering function taken from:
     https://python-commandments.org/pyqt-center-window
