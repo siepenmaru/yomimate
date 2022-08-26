@@ -29,7 +29,7 @@ class YomiDict(jamdict.Jamdict):
             entries.append(ch)
         return entries
 
-    def get_romaji(self, original: str) -> str:
+    def to_romaji(self, original: str) -> str:
         result = self.kks.convert(original)
         out = ''
         for item in result:
