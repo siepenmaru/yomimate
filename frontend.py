@@ -1,10 +1,13 @@
 import sys
 from PyQt5 import QtCore, QtGui, QtWidgets, uic
+from ocr import OCR
+
+TEMPLATE_PATH = "templates/"
 
 class Landing(QtWidgets.QWidget):
     def __init__(self):
         super().__init__()
-        uic.loadUi('landing.ui', self)
+        uic.loadUi(TEMPLATE_PATH+'landing.ui', self)
         self.setWindowTitle("Yomimate")
 
     def openFileNameDialog(self) -> str:
@@ -15,38 +18,38 @@ class Landing(QtWidgets.QWidget):
             return fileName
 
     def switchUi(self):
-        uic.loadUi('another.ui', self)
+        uic.loadUi(TEMPLATE_PATH+'another.ui', self)
         self.show()
         self.setWindowTitle("you\'re winner")
 
-class Another(QtWidgets.QWidget):
+class OCRPage(QtWidgets.QWidget):
     def __init__(self):
         super().__init__()
-        uic.loadUi('another.ui', self)
-
-class OCROutput(QtWidgets.QWidget):
-    def __init__(self):
-        super().__init__()
-        uic.loadUi('ocr.ui', self)
-
+        uic.loadUi(TEMPLATE_PATH+'ocr.ui', self)
 
 class Frontend(QtWidgets.QStackedWidget):
     landing: Landing
-    another: Another
+    ocrPage: OCRPage
 
     def __init__(self):
         super().__init__()
         self.landing = Landing()
-        self.another = Another()
+        self.ocrPage = OCRPage()
         self.addWidget(self.landing)
-        self.addWidget(self.another)
+        self.addWidget(self.ocrPage)
         self.landing.selectImageButton.clicked.connect(self.handleImage)
 
     def handleImage(self):
         name = self.landing.openFileNameDialog()
+        self.switchToOCRPage()
+
+    def switchToOCRPage(self):
         self.setCurrentIndex(1)
-        self.another.outputLabel.setText("You selected the file: %s" % name)
+        self.resize(1128, 883)
+        self.centerWindow()
         self.setWindowTitle("you\'re winner")
+        self.ocrPage.ocrOutputLabel.setText("Lorem Ipsum Dolor Something Something")
+
     
     """ 
     window centering function taken from:
