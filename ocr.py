@@ -1,16 +1,18 @@
 import easyocr
 
-class OCR:
+class YomimateOCR:
     reader: easyocr.Reader
     results: list
+    minConfidence: int
 
     # index constants to access result data
     POS_INDEX = 0
     TEXT_INDEX = 1
     CONFIDENCE_INDEX = 2
 
-    def __init__(self, lang: str, gpu: bool):
+    def __init__(self, lang: str, gpu: bool, minConfidence: int=0.7):
         self.reader = easyocr.Reader([lang], gpu=gpu)
+        self.minConfidence = minConfidence
 
     def readImage(self, fileLocation: str) -> None:
         self.results = reader.readtext(fileLocation)
@@ -23,9 +25,9 @@ class OCR:
         return outText
 
     # prune results under a given confidence value
-    def pruneResults(self, minConfidence: int) -> None:
+    def pruneResults(self) -> None:
         for entry in self.results:
-            if entry[self.CONFIDENCE_INDEX] < minConfidence:
+            if entry[self.CONFIDENCE_INDEX] < self.minConfidence:
                 self.results.remove[entry]
 
 if __name__ == '__main__':
