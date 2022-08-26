@@ -11,13 +11,13 @@ class YomiDict(jamdict.Jamdict):
     def updateLookup(self, input: str) -> None:
         self.lookupResult = self.lookup(input)
 
-    def get_entries(self, input: str) -> list:
+    def get_entries(self) -> list[jamdict.util.LookupResult]:
         entries = []
         for entry in self.lookupResult.entries:
             entries.append(entry)
         return entries
     
-    def get_related(self, input: str) -> list[jamdict.util.Character]:
+    def get_related(self) -> list[jamdict.util.Character]:
         entries = []
         for ch in self.lookupResult.chars:
             entries.append(ch)
