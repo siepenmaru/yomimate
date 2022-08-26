@@ -15,7 +15,7 @@ class YomimateOCR:
         self.minConfidence = minConfidence
 
     def readImage(self, fileLocation: str) -> None:
-        self.results = reader.readtext(fileLocation)
+        self.results = self.reader.readtext(fileLocation)
 
     # join together resulting text into one string
     def getText(self) -> str:
