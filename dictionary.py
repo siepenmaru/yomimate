@@ -22,6 +22,12 @@ class YomiDict(jamdict.Jamdict):
         for entry in self.lookupResult.entries:
             entries.append(entry)
         return entries
+
+    def get_entry_dicts(self) -> list[dict]:
+        entryDicts = []
+        for entry in self.lookupResult.entries:
+            entry.append(entry.to_dict())
+        return entryDicts
     
     def get_related(self) -> list[jamdict.util.Character]:
         entries = []
