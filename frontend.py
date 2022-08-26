@@ -60,7 +60,7 @@ class Frontend(QtWidgets.QStackedWidget):
         self.setCurrentIndex(1)
         self.resize(1128, 883)
         self.centerWindow()
-        self.setWindowTitle("you\'re winner")
+        self.setWindowTitle("Yomimate v0.1")
         img = QtGui.QPixmap(fileLocation)
         self.ocrPage.outImage.resize(img.width(), img.height())
         self.ocrPage.outImage.setPixmap(img)
