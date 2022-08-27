@@ -159,8 +159,8 @@
          <rect>
           <x>0</x>
           <y>0</y>
-          <width>1292</width>
-          <height>732</height>
+          <width>1077</width>
+          <height>397</height>
          </rect>
         </property>
         <layout class="QGridLayout" name="gridLayout_2">
@@ -180,9 +180,6 @@
            </property>
            <property name="text">
             <string/>
-           </property>
-           <property name="pixmap">
-            <pixmap>../images/chainsawman.jpeg</pixmap>
            </property>
            <property name="scaledContents">
             <bool>true</bool>
