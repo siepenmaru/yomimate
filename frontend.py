@@ -10,6 +10,9 @@ class Landing(QtWidgets.QWidget):
         super().__init__()
         uic.loadUi(TEMPLATE_PATH+'landing.ui', self)
         self.setWindowTitle("Yomi-mate")
+        self.dragDropArea = DragDropArea()
+        self.dragDropLayout.addWidget(self.dragDropArea)
+        # self.setLayout(self.dragDropLayout)
 
     def openFileNameDialog(self) -> str:
         options = QtWidgets.QFileDialog.Options()
@@ -17,6 +20,56 @@ class Landing(QtWidgets.QWidget):
         fileName, _ = QtWidgets.QFileDialog.getOpenFileName(self,"QFileDialog.getOpenFileName()", "","Images (*.jpg *.jpeg *.png)", options=options)
         if fileName:
             return fileName
+
+class DragDropArea(QtWidgets.QLineEdit):
+    imageDropped = QtCore.pyqtSignal(str)
+
+    def __init__(self):
+        super().__init__()
+        self.setObjectName(u"dragDropArea")
+        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Expanding)
+        sizePolicy.setHorizontalStretch(0)
+        sizePolicy.setVerticalStretch(0)
+        sizePolicy.setHeightForWidth(self.sizePolicy().hasHeightForWidth())
+        self.setSizePolicy(sizePolicy)
+        self.setAlignment(QtCore.Qt.AlignCenter)
+        self.setText("Drag and drop your image here!")
+        self.setReadOnly(True)
+        self.setAcceptDrops(True)
+
+    """ 
+    drag and drop signal handling adapted from
+    https://learndataanalysis.org/how-to-implement-image-drag-and-drop-feature-pyqt5-tutorial/
+    """
+    def dragEnterEvent(self, event):
+        if event.mimeData().hasImage:
+            event.accept()
+        else:
+            event.ignore()
+
+    def dragMoveEvent(self, event):
+        if event.mimeData().hasImage:
+            event.accept()
+        else:
+            event.ignore()
+
+    def dropEvent(self, event):
+        if event.mimeData().hasImage:
+            print('valid')
+            event.setDropAction(QtCore.Qt.CopyAction)
+            # file_path = event.mimeData().urls()[0].toLocalFile()
+            file_path = 'images/tmp.jpg'
+            if QtGui.QImage(event.mimeData().imageData()).save(file_path):
+                print(file_path)
+                # self.set_image(file_path)
+                self.imageDropped.emit(file_path)
+            else:
+                print('save fail')
+
+            event.accept()
+        else:
+            print('invalid!!!')
+            event.ignore()
 
 class OCRPage(QtWidgets.QWidget):
     def __init__(self):
@@ -40,6 +93,7 @@ class Frontend(QtWidgets.QStackedWidget):
         self.addWidget(self.ocrPage)
         self.landing.selectImageButton.clicked.connect(self.handleImage)
         self.ocrPage.scanAnotherButton.clicked.connect(self.handleImage)
+        self.landing.dragDropArea.imageDropped.connect(self.handleDroppedImage)
 
     def handleImage(self):
         fileLocation = self.landing.openFileNameDialog()
@@ -51,6 +105,24 @@ class Frontend(QtWidgets.QStackedWidget):
             self.switchToOCRPage(fileLocation)
         except:
             self.landing.label_2.setText("Oh no! something went wrong.")
+
+    """ 
+    code smells
+    won't fix
+    for now
+    """
+    def handleDroppedImage(self, fileLocation: str):
+        # try:
+        self.landing.label_2.setText("Please wait... Yomi-mate is scanning your image!")
+        print(fileLocation)
+        return
+        # extractedText = self.readImage(fileLocation)
+        # self.ocrPage.ocrOutputLabel.setText(extractedText)
+        # self.ocrPage.ocrOutputLabel.selectionChanged.connect(self.handleSelection)
+        # self.switchToOCRPage(fileLocation)
+        # except:
+            # self.landing.label_2.setText("Oh no! something went wrong.")
+
 
     def switchToOCRPage(self, fileLocation: str):
         self.setCurrentIndex(1)

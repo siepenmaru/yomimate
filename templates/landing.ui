@@ -61,28 +61,6 @@
     <set>Qt::AlignCenter</set>
    </property>
   </widget>
-  <widget class="QLineEdit" name="dragDropArea">
-   <property name="geometry">
-    <rect>
-     <x>70</x>
-     <y>100</y>
-     <width>261</width>
-     <height>111</height>
-    </rect>
-   </property>
-   <property name="text">
-    <string>Drag and drop your image here!</string>
-   </property>
-   <property name="alignment">
-    <set>Qt::AlignCenter</set>
-   </property>
-   <property name="dragEnabled">
-    <bool>false</bool>
-   </property>
-   <property name="readOnly">
-    <bool>true</bool>
-   </property>
-  </widget>
   <widget class="QLabel" name="label_3">
    <property name="geometry">
     <rect>
@@ -98,6 +76,17 @@
    <property name="wordWrap">
     <bool>true</bool>
    </property>
+  </widget>
+  <widget class="QWidget" name="gridLayoutWidget">
+   <property name="geometry">
+    <rect>
+     <x>50</x>
+     <y>100</y>
+     <width>301</width>
+     <height>121</height>
+    </rect>
+   </property>
+   <layout class="QGridLayout" name="dragDropLayout"/>
   </widget>
  </widget>
  <resources/>
