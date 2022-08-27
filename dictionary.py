@@ -1,4 +1,5 @@
 import jamdict
+from jamdict.kanjidic2 import Character
 from pykakasi import kakasi
 """
 HEAVILY utilizes the JamDict library
@@ -28,8 +29,24 @@ class YomiDict(jamdict.Jamdict):
         for entry in self.lookupResult.entries:
             entryDicts.append(entry.to_dict())
         return entryDicts
+
+    def getCharacters(self) -> list[Character]:
+        chars = []
+        for c in self.lookupResult.chars:
+            chars.append(c)
+        return chars
+
+    def getKanjiRadicals(self, kanji: str):
+        return self.krad[kanji]
+
+    def getRadicalKanji(self, radical: str):
+        result = self.lookup(''.join(self.radk[radical]))
+        dicts = []
+        for c in result.chars:
+            dicts.append(c.to_dict())
+        return dicts
     
-    def getRelated(self) -> list[jamdict.util.Character]:
+    def getRelated(self) -> list[Character]:
         entries = []
         for ch in self.lookupResult.chars:
             entries.append(ch)
