@@ -23,6 +23,7 @@ class Landing(QtWidgets.QWidget):
 
 class DragDropArea(QtWidgets.QLineEdit):
     imageDropped = QtCore.pyqtSignal(str)
+    dropFail = QtCore.pyqtSignal(str)
 
     def __init__(self):
         super().__init__()
@@ -57,16 +58,14 @@ class DragDropArea(QtWidgets.QLineEdit):
         if event.mimeData().hasImage:
             print('valid')
             event.setDropAction(QtCore.Qt.CopyAction)
-            # file_path = event.mimeData().urls()[0].toLocalFile()
-            file_path = 'images/tmp.jpg'
-            if QtGui.QImage(event.mimeData().imageData()).save(file_path):
-                print(file_path)
-                # self.set_image(file_path)
+            file_path = event.mimeData().urls()[0].toLocalFile()
+            if file_path:
                 self.imageDropped.emit(file_path)
+                event.accept()
             else:
-                print('save fail')
+                self.dropFail.emit('uh oh')
+                event.ignore()
 
-            event.accept()
         else:
             print('invalid!!!')
             event.ignore()
@@ -94,6 +93,7 @@ class Frontend(QtWidgets.QStackedWidget):
         self.landing.selectImageButton.clicked.connect(self.handleImage)
         self.ocrPage.scanAnotherButton.clicked.connect(self.handleImage)
         self.landing.dragDropArea.imageDropped.connect(self.handleDroppedImage)
+        self.landing.dragDropArea.dropFail.connect(self.popupErrorMessage)
 
     def handleImage(self):
         fileLocation = self.landing.openFileNameDialog()
@@ -106,22 +106,29 @@ class Frontend(QtWidgets.QStackedWidget):
         except:
             self.landing.label_2.setText("Oh no! something went wrong.")
 
+    def popupErrorMessage(self):
+        dlg = QtWidgets.QMessageBox(self)
+        dlg.setWindowTitle("Uh oh!")
+        dlg.setText("Sorry! As of version 0.1, Yomi-mate does not support drag and drop from web browsers. You can instead save your image locally, and drag the image from your system's file explorer.")
+        button = dlg.exec()
+
+        if button == QtWidgets.QMessageBox.Ok:
+            dlg.close()
+
     """ 
     code smells
     won't fix
     for now
     """
     def handleDroppedImage(self, fileLocation: str):
-        # try:
-        self.landing.label_2.setText("Please wait... Yomi-mate is scanning your image!")
-        print(fileLocation)
-        return
-        # extractedText = self.readImage(fileLocation)
-        # self.ocrPage.ocrOutputLabel.setText(extractedText)
-        # self.ocrPage.ocrOutputLabel.selectionChanged.connect(self.handleSelection)
-        # self.switchToOCRPage(fileLocation)
-        # except:
-            # self.landing.label_2.setText("Oh no! something went wrong.")
+        try:
+            self.landing.label_2.setText("Please wait... Yomi-mate is scanning your image!")
+            extractedText = self.readImage(fileLocation)
+            self.ocrPage.ocrOutputLabel.setText(extractedText)
+            self.ocrPage.ocrOutputLabel.selectionChanged.connect(self.handleSelection)
+            self.switchToOCRPage(fileLocation)
+        except:
+            self.landing.label_2.setText("Oh no! something went wrong.")
 
 
     def switchToOCRPage(self, fileLocation: str):
