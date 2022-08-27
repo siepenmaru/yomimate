@@ -2,23 +2,26 @@ import sys
 from PyQt5 import QtCore, QtGui, QtWidgets, uic
 from ocr import YomimateOCR
 from dictionary import YomiDict
+import cv_highlight
 import os
 
-# taken from https://stackoverflow.com/a/13790741
-# Define function to import external files when using PyInstaller.
-def resource_path(relative_path):
-    """ Get absolute path to resource, works for dev and for PyInstaller """
-    try:
-        # PyInstaller creates a temp folder and stores path in _MEIPASS
-        base_path = sys._MEIPASS
-    except Exception:
-        base_path = os.path.abspath(".")
 
-    return os.path.join(base_path, relative_path)
+# # taken from https://stackoverflow.com/a/13790741
+# # Define function to import external files when using PyInstaller.
+# def resource_path(relative_path):
+#     """ Get absolute path to resource, works for dev and for PyInstaller """
+#     try:
+#         # PyInstaller creates a temp folder and stores path in _MEIPASS
+#         base_path = sys._MEIPASS
+#     except Exception:
+#         base_path = os.path.abspath(".")
+
+#     return os.path.join(base_path, relative_path)
+
 class Landing(QtWidgets.QWidget):
     def __init__(self):
         super().__init__()
-        uic.loadUi(resource_path('templates/landing.ui'), self)
+        uic.loadUi('templates/landing.ui', self)
         self.setWindowTitle("Yomi-mate")
         self.dragDropArea = DragDropArea()
         self.dragDropLayout.addWidget(self.dragDropArea)
@@ -30,6 +33,47 @@ class Landing(QtWidgets.QWidget):
         fileName, _ = QtWidgets.QFileDialog.getOpenFileName(self,"QFileDialog.getOpenFileName()", "","Images (*.jpg *.jpeg *.png)", options=options)
         if fileName:
             return fileName
+
+"""
+superclass for widgets with drag drop capability
+"""
+class DragDropWidget():
+    """ 
+    drag and drop signal handling adapted from
+    https://learndataanalysis.org/how-to-implement-image-drag-and-drop-feature-pyqt5-tutorial/
+    """
+    @staticmethod
+    def dragEnterEvent(event):
+        if event.mimeData().hasImage:
+            event.accept()
+            return True
+        else:
+            event.ignore()
+            return False
+
+    @staticmethod
+    def dragMoveEvent(event):
+        if event.mimeData().hasImage:
+            event.accept()
+            return True
+        else:
+            event.ignore()
+            return False
+
+    @staticmethod
+    def dropEvent(event) -> str | None:
+        if event.mimeData().hasImage:
+            event.setDropAction(QtCore.Qt.CopyAction)
+            file_path = event.mimeData().urls()[0].toLocalFile()
+            if file_path:
+                event.accept()
+                return file_path
+            else:
+                event.ignore()
+                return None
+        else:
+            event.ignore()
+            return None
 
 class DragDropArea(QtWidgets.QLineEdit):
     imageDropped = QtCore.pyqtSignal(str)
@@ -48,42 +92,25 @@ class DragDropArea(QtWidgets.QLineEdit):
         self.setReadOnly(True)
         self.setAcceptDrops(True)
 
-    """ 
-    drag and drop signal handling adapted from
-    https://learndataanalysis.org/how-to-implement-image-drag-and-drop-feature-pyqt5-tutorial/
-    """
     def dragEnterEvent(self, event):
-        if event.mimeData().hasImage:
-            event.accept()
-        else:
-            event.ignore()
+        DragDropWidget.dragEnterEvent(event)
 
     def dragMoveEvent(self, event):
-        if event.mimeData().hasImage:
-            event.accept()
-        else:
-            event.ignore()
+        DragDropWidget.dragMoveEvent(event)
 
     def dropEvent(self, event):
-        if event.mimeData().hasImage:
-            print('valid')
-            event.setDropAction(QtCore.Qt.CopyAction)
-            file_path = event.mimeData().urls()[0].toLocalFile()
-            if file_path:
-                self.imageDropped.emit(file_path)
-                event.accept()
-            else:
-                self.dropFail.emit('uh oh')
-                event.ignore()
-
+        file_path = DragDropWidget.dropEvent(event)
+        if file_path:
+            self.imageDropped.emit(file_path)
         else:
-            print('invalid!!!')
-            event.ignore()
+            self.dropFail.emit('uh oh!')
+
 
 class OCRPage(QtWidgets.QWidget):
     def __init__(self):
         super().__init__()
-        uic.loadUi(resource_path('templates/ocr.ui'), self)
+        uic.loadUi('templates/ocr.ui', self)
+        self.setAcceptDrops(True)
 
 class Frontend(QtWidgets.QStackedWidget):
     landing: Landing
@@ -104,6 +131,8 @@ class Frontend(QtWidgets.QStackedWidget):
         self.ocrPage.scanAnotherButton.clicked.connect(self.handleImage)
         self.landing.dragDropArea.imageDropped.connect(self.handleDroppedImage)
         self.landing.dragDropArea.dropFail.connect(self.popupErrorMessage)
+        # self.ocrPage.imageDropped.connect(self.handleDroppedImage)
+        # self.ocrPage.dropFail.connect(self.popupErrorMessage)
 
     def handleImage(self):
         fileLocation = self.landing.openFileNameDialog()
