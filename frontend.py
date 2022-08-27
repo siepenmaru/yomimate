@@ -35,7 +35,7 @@ class Landing(QtWidgets.QWidget):
             return fileName
 
 """
-superclass for widgets with drag drop capability
+Static methods for widgets with drag drop capability
 """
 class DragDropWidget():
     """ 
