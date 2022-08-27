@@ -12,6 +12,7 @@ os.environ["QT_QPA_PLATFORM_PLUGIN_PATH"] = QtCore.QLibraryInfo.location(
     QtCore.QLibraryInfo.PluginsPath
 )
 
+# widget to display overlay ocr recognized boxes onto scanned image
 class CanvasWidget(QtWidgets.QWidget):
     def __init__(self, w: int, h: int):
         super().__init__()
