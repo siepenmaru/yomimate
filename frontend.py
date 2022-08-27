@@ -1,7 +1,7 @@
 import sys
 from PyQt5 import QtCore, QtGui, QtWidgets, uic
 from ocr import YomimateOCR
-from dictionary import YomiDict
+from dictionary import YomiDict, Character
 import cv_highlight
 import os
 
@@ -214,17 +214,16 @@ class Frontend(QtWidgets.QStackedWidget):
         except:
             return
 
-        dicts = self.yomiDict.getEntryDicts()
+        entries = self.yomiDict.getEntryDicts()
+        chars = self.yomiDict.getCharacters()
 
-        if not dicts:
+        if not entries and not chars:
             self.ocrPage.translation.setText("Uh oh! Yomi-mate couldn't find an entry for that selection.")
             return
 
-        out = self.formatDictionaryDisplay(dicts)
-        # self.ocrPage.translation.setText(out)
-        # self.ocrPage.translation.textCursor().insertHtml(out)
+        out = self.formatDictionaryDisplay(entries)
+        out += self.formatCharactersDisplay(chars)
         self.ocrPage.translation.setMarkdown(out)
-        # self.ocrPage.translation.textCursor().insertHtml("<b>Bold text. Wow!</b><p></p>")
 
     # format dictionary entries for better readibility
     def formatDictionaryDisplay(self, dicts: list[dict]) -> str:
@@ -251,7 +250,28 @@ class Frontend(QtWidgets.QStackedWidget):
                 entryStr += '    ' + ', '.join(meanings) + '\n\n'
 
             out += entryStr + '\n\n' + 50*'-' + '\n\n'
-            # out += f"kanji: {entry['kanji']}\nentry: {entry['kana']}\nsenses: {entry['senses']}\n"
+        return out
+
+    def formatCharactersDisplay(self, chars: list[Character]) -> str:
+        out = ""
+        for ch in chars:
+            out += f"# **{ch.literal}**\n"
+            if ch.jlpt and ch.freq:
+                out += f"Frequency: {ch.freq} ⋅ JLPT {ch.jlpt}\n\n"
+            if ch.rad_names:
+                out += f"Names: {', '.join(ch.rad_names)}\n\n"
+
+            out += "Readings: "
+            for rmg in ch.rm_groups:
+                kanaReadings = [r.value for r in rmg.readings if r.r_type == 'ja_on' or r.r_type == 'ja_kun']
+                romajiReadings = [self.yomiDict.toRomaji(r) for r in kanaReadings]
+
+                joined = [f'{kanaReadings[i]} {(romajiReadings[i])}' for i in range(len(kanaReadings))]
+                out += f"{', '.join(joined)}"
+
+            out += f"\n\nMeanings: {', '.join(ch.meanings(english_only=True))}"
+            
+            out += '\n\n' + 50*'-' + '\n\n'
         return out
 
     def readImage(self, fileLocation: str) -> str:
