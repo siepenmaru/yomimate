@@ -39,6 +39,7 @@ class Frontend(QtWidgets.QStackedWidget):
         self.addWidget(self.landing)
         self.addWidget(self.ocrPage)
         self.landing.selectImageButton.clicked.connect(self.handleImage)
+        self.ocrPage.scanAnotherButton.clicked.connect(self.handleImage)
 
     def handleImage(self):
         fileLocation = self.landing.openFileNameDialog()
@@ -53,7 +54,8 @@ class Frontend(QtWidgets.QStackedWidget):
 
     def switchToOCRPage(self, fileLocation: str):
         self.setCurrentIndex(1)
-        self.resize(1128, 883)
+        # FIXME: this use of magic numbers STINKS! please fix this
+        self.resize(1128, 922)
         self.centerWindow()
         self.setWindowTitle("Yomimate v0.1")
         img = QtGui.QPixmap(fileLocation)
