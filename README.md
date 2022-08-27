@@ -1,4 +1,4 @@
-# Yomimate
+# Yomi-mate
 An Optical Character Recognition driven dictionary. Inpired by the pop-up dictionary browser extension Yomichan (https://github.com/FooSoft/yomichan)
 
 Created as an entry for the UQ Computing Society Hackathon 2022

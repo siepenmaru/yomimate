@@ -127,7 +127,7 @@
         <set>Qt::TextSelectableByMouse</set>
        </property>
        <property name="placeholderText">
-        <string>Please wait... Yomimate is scanning your image!</string>
+        <string>Please wait... Yomi-mate is scanning your image!</string>
        </property>
       </widget>
      </item>
@@ -214,7 +214,7 @@
         </size>
        </property>
        <property name="text">
-        <string>Yomimate saw:</string>
+        <string>Yomi-mate saw:</string>
        </property>
       </widget>
      </item>

@@ -11,7 +11,7 @@
    </rect>
   </property>
   <property name="windowTitle">
-   <string>Yomimate v0.1</string>
+   <string>Yomi-mate v0.1</string>
   </property>
   <widget class="QPushButton" name="selectImageButton">
    <property name="geometry">
@@ -36,7 +36,7 @@
     </rect>
    </property>
    <property name="text">
-    <string>Welcome to Yomimate!</string>
+    <string>Welcome to Yomi-mate!</string>
    </property>
    <property name="scaledContents">
     <bool>false</bool>

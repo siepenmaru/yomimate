@@ -9,7 +9,7 @@ class Landing(QtWidgets.QWidget):
     def __init__(self):
         super().__init__()
         uic.loadUi(TEMPLATE_PATH+'landing.ui', self)
-        self.setWindowTitle("Yomimate")
+        self.setWindowTitle("Yomi-mate")
 
     def openFileNameDialog(self) -> str:
         options = QtWidgets.QFileDialog.Options()
@@ -44,7 +44,7 @@ class Frontend(QtWidgets.QStackedWidget):
     def handleImage(self):
         fileLocation = self.landing.openFileNameDialog()
         try:
-            self.landing.label_2.setText("Please wait... Yomimate is scanning your image!")
+            self.landing.label_2.setText("Please wait... Yomi-mate is scanning your image!")
             extractedText = self.readImage(fileLocation)
             self.ocrPage.ocrOutputLabel.setText(extractedText)
             self.ocrPage.ocrOutputLabel.selectionChanged.connect(self.handleSelection)
@@ -57,7 +57,7 @@ class Frontend(QtWidgets.QStackedWidget):
         # FIXME: this use of magic numbers STINKS! please fix this
         self.resize(1128, 922)
         self.centerWindow()
-        self.setWindowTitle("Yomimate v0.1")
+        self.setWindowTitle("Yomi-mate v0.1")
         img = QtGui.QPixmap(fileLocation)
         self.ocrPage.outImage.resize(img.width(), img.height())
         self.ocrPage.outImage.setPixmap(img)
@@ -76,7 +76,7 @@ class Frontend(QtWidgets.QStackedWidget):
         dicts = self.yomiDict.getEntryDicts()
 
         if not dicts:
-            self.ocrPage.translation.setText("Uh oh! Yomimate couldn't find an entry for that selection.")
+            self.ocrPage.translation.setText("Uh oh! Yomi-mate couldn't find an entry for that selection.")
             return
 
         out = self.formatDictionaryDisplay(dicts)
