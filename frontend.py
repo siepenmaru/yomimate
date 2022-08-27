@@ -86,8 +86,28 @@ class Frontend(QtWidgets.QStackedWidget):
     def formatDictionaryDisplay(self, dicts: list[dict]) -> str:
         out = ""
         for entry in dicts:
-            info = f" ({entry['info']})" if 'info' in entry else ""
-            out += f"{entry['kanji']}{info}\n{entry['kana']}\n{entry['senses']}"
+            kanji = entry['kanji']
+            kana = entry['kana'][0]['text']
+            senses = entry['senses']
+            reading = self.yomiDict.toRomaji(kana)
+
+            entryStr = ""
+            entryStr += f"kanji: {kanji[0]['text']}\n" if kanji else "" # entry may be kana only
+            entryStr += f"kana: {kana}\n"
+            entryStr += f"romaji: {reading}\n"
+
+            for sense in senses:
+                # what type of word is it?
+                # noun, verb, adverb, etc.
+                pos = sense['pos'][0]
+                entryStr += f"type: {pos}\n"
+
+                # word definitions
+                meanings = [meaning['text'] for meaning in sense['SenseGloss']]
+                entryStr += ', '.join(meanings) + '\n'
+
+            out += entryStr + '\n' + 50*'-' + '\n'
+            # out += f"kanji: {entry['kanji']}\nentry: {entry['kana']}\nsenses: {entry['senses']}\n"
         return out
 
     def readImage(self, fileLocation: str) -> str:
