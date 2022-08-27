@@ -80,7 +80,10 @@ class Frontend(QtWidgets.QStackedWidget):
             return
 
         out = self.formatDictionaryDisplay(dicts)
-        self.ocrPage.translation.setText(out)
+        # self.ocrPage.translation.setText(out)
+        # self.ocrPage.translation.textCursor().insertHtml(out)
+        self.ocrPage.translation.setMarkdown(out)
+        # self.ocrPage.translation.textCursor().insertHtml("<b>Bold text. Wow!</b><p></p>")
 
     # format dictionary entries for better readibility
     def formatDictionaryDisplay(self, dicts: list[dict]) -> str:
@@ -91,22 +94,22 @@ class Frontend(QtWidgets.QStackedWidget):
             senses = entry['senses']
             reading = self.yomiDict.toRomaji(kana)
 
+            # end me
             entryStr = ""
-            entryStr += f"kanji: {kanji[0]['text']}\n" if kanji else "" # entry may be kana only
-            entryStr += f"kana: {kana}\n"
-            entryStr += f"romaji: {reading}\n"
+            entryStr += f"# **{kanji[0]['text']}**\n" if kanji else "" # entry may be kana only
+            entryStr += f"{kana} ⋅ *{reading}*\n\n"
 
             for sense in senses:
                 # what type of word is it?
                 # noun, verb, adverb, etc.
                 pos = sense['pos'][0]
-                entryStr += f"type: {pos}\n"
+                entryStr += f"1. ({pos})\n\n"
 
                 # word definitions
                 meanings = [meaning['text'] for meaning in sense['SenseGloss']]
-                entryStr += ', '.join(meanings) + '\n'
+                entryStr += '    ' + ', '.join(meanings) + '\n\n'
 
-            out += entryStr + '\n' + 50*'-' + '\n'
+            out += entryStr + '\n\n' + 50*'-' + '\n\n'
             # out += f"kanji: {entry['kanji']}\nentry: {entry['kana']}\nsenses: {entry['senses']}\n"
         return out
 
