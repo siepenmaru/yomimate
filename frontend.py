@@ -2,13 +2,22 @@ import sys
 from PyQt5 import QtCore, QtGui, QtWidgets, uic
 from ocr import YomimateOCR
 from dictionary import YomiDict
+import os
 
-TEMPLATE_PATH = "templates/"
+# Define function to import external files when using PyInstaller.
+def resource_path(relative_path):
+    """ Get absolute path to resource, works for dev and for PyInstaller """
+    try:
+        # PyInstaller creates a temp folder and stores path in _MEIPASS
+        base_path = sys._MEIPASS
+    except Exception:
+        base_path = os.path.abspath(".")
 
+    return os.path.join(base_path, relative_path)
 class Landing(QtWidgets.QWidget):
     def __init__(self):
         super().__init__()
-        uic.loadUi(TEMPLATE_PATH+'landing.ui', self)
+        uic.loadUi(resource_path('templates/landing.ui'), self)
         self.setWindowTitle("Yomi-mate")
         self.dragDropArea = DragDropArea()
         self.dragDropLayout.addWidget(self.dragDropArea)
@@ -73,7 +82,7 @@ class DragDropArea(QtWidgets.QLineEdit):
 class OCRPage(QtWidgets.QWidget):
     def __init__(self):
         super().__init__()
-        uic.loadUi(TEMPLATE_PATH+'ocr.ui', self)
+        uic.loadUi(resource_path('templates/ocr.ui'), self)
 
 class Frontend(QtWidgets.QStackedWidget):
     landing: Landing
