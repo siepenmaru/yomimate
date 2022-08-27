@@ -71,16 +71,22 @@ class Frontend(QtWidgets.QStackedWidget):
         except:
             return
 
-        entries = self.yomiDict.getEntries()
+        dicts = self.yomiDict.getEntryDicts()
 
-        if not entries:
+        if not dicts:
             self.ocrPage.translation.setText("Uh oh! Yomimate couldn't find an entry for that selection.")
             return
 
-        out = ""
-        for entry in entries:
-            out += str(entry) + '\n'
+        out = self.formatDictionaryDisplay(dicts)
         self.ocrPage.translation.setText(out)
+
+    # format dictionary entries for better readibility
+    def formatDictionaryDisplay(self, dicts: list[dict]) -> str:
+        out = ""
+        for entry in dicts:
+            info = f" ({entry['info']})" if 'info' in entry else ""
+            out += f"{entry['kanji']}{info}\n{entry['kana']}\n{entry['senses']}"
+        return out
 
     def readImage(self, fileLocation: str) -> str:
         self.reader.readImage(fileLocation)
