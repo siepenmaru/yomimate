@@ -265,7 +265,7 @@
        <item>
         <widget class="QLabel" name="label_2">
          <property name="text">
-          <string>or.. just drop an image from your computer anywhere in this window!</string>
+          <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-size:14pt;&quot;&gt;or.. just &lt;/span&gt;&lt;span style=&quot; font-size:14pt; font-weight:600;&quot;&gt;drop an image&lt;/span&gt;&lt;span style=&quot; font-size:14pt;&quot;&gt; from your computer anywhere in this window!&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
          </property>
         </widget>
        </item>
