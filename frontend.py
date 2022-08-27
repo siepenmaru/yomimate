@@ -64,11 +64,15 @@ class DragDropWidget():
     def dropEvent(event) -> str | None:
         if event.mimeData().hasImage:
             event.setDropAction(QtCore.Qt.CopyAction)
-            file_path = event.mimeData().urls()[0].toLocalFile()
-            if file_path:
-                event.accept()
-                return file_path
-            else:
+            try:
+                file_path = event.mimeData().urls()[0].toLocalFile()
+                if file_path:
+                    event.accept()
+                    return file_path
+                else:
+                    event.ignore()
+                    return None
+            except:
                 event.ignore()
                 return None
         else:
@@ -113,6 +117,7 @@ class OCRPage(QtWidgets.QWidget):
     def __init__(self):
         super().__init__()
         uic.loadUi('templates/ocr.ui', self)
+        self.translation.setReadOnly(True)
         self.setAcceptDrops(True)
     
     def dragEnterEvent(self, event):
