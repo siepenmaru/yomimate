@@ -107,10 +107,26 @@ class DragDropArea(QtWidgets.QLineEdit):
 
 
 class OCRPage(QtWidgets.QWidget):
+    imageDropped = QtCore.pyqtSignal(str)
+    dropFail = QtCore.pyqtSignal(str)
+
     def __init__(self):
         super().__init__()
         uic.loadUi('templates/ocr.ui', self)
         self.setAcceptDrops(True)
+    
+    def dragEnterEvent(self, event):
+        DragDropWidget.dragEnterEvent(event)
+
+    def dragMoveEvent(self, event):
+        DragDropWidget.dragMoveEvent(event)
+
+    def dropEvent(self, event):
+        file_path = DragDropWidget.dropEvent(event)
+        if file_path:
+            self.imageDropped.emit(file_path)
+        else:
+            self.dropFail.emit('uh oh!')
 
 class Frontend(QtWidgets.QStackedWidget):
     landing: Landing
@@ -131,8 +147,8 @@ class Frontend(QtWidgets.QStackedWidget):
         self.ocrPage.scanAnotherButton.clicked.connect(self.handleImage)
         self.landing.dragDropArea.imageDropped.connect(self.handleDroppedImage)
         self.landing.dragDropArea.dropFail.connect(self.popupErrorMessage)
-        # self.ocrPage.imageDropped.connect(self.handleDroppedImage)
-        # self.ocrPage.dropFail.connect(self.popupErrorMessage)
+        self.ocrPage.imageDropped.connect(self.handleDroppedImage)
+        self.ocrPage.dropFail.connect(self.popupErrorMessage)
 
     def handleImage(self):
         fileLocation = self.landing.openFileNameDialog()
