@@ -4,6 +4,7 @@ from ocr import YomimateOCR
 from dictionary import YomiDict
 import os
 
+# taken from https://stackoverflow.com/a/13790741
 # Define function to import external files when using PyInstaller.
 def resource_path(relative_path):
     """ Get absolute path to resource, works for dev and for PyInstaller """
@@ -115,6 +116,8 @@ class Frontend(QtWidgets.QStackedWidget):
         except:
             self.landing.label_2.setText("Oh no! something went wrong.")
 
+    # adapted from:
+    # https://www.pythonguis.com/tutorials/pyqt-dialogs/
     def popupErrorMessage(self):
         dlg = QtWidgets.QMessageBox(self)
         dlg.setWindowTitle("Uh oh!")
