@@ -196,7 +196,7 @@ class Frontend(QtWidgets.QStackedWidget):
     def switchToOCRPage(self, fileLocation: str):
         self.setCurrentIndex(1)
         # FIXME: this use of magic numbers STINKS! please fix this
-        self.resize(1128, 922)
+        self.resize(1128, 1000)
         self.centerWindow()
         self.setWindowTitle("Yomi-mate v0.1")
         img = QtGui.QPixmap(fileLocation)
