@@ -131,19 +131,26 @@ class Frontend(QtWidgets.QStackedWidget):
         out = ""
         for ch in chars:
             out += f"# **{ch.literal}**\n"
-            if ch.jlpt and ch.freq:
-                out += f"Frequency: {ch.freq} ⋅ JLPT {ch.jlpt}\n\n"
+            tags = []
+            if ch.jlpt: tags.append(f"JLPT {ch.jlpt}")
+            if ch.grade: tags.append(f"Jōyō Kanji taught in Grade {ch.grade}")
+            out += " ⋅ ".join(tags) + "\n\n"
+
             if ch.rad_names:
                 out += f"Names: {', '.join(ch.rad_names)}\n\n"
+
             out += f"Radicals: {', '.join(rad for rad in self.yomiDict.getKanjiRadicals(ch.literal))}\n\n"
 
-            out += "Readings: "
             for rmg in ch.rm_groups:
-                kanaReadings = [r.value for r in rmg.readings if r.r_type == 'ja_on' or r.r_type == 'ja_kun']
-                romajiReadings = [self.yomiDict.toRomaji(r) for r in kanaReadings]
+                kunReadings = [r.value for r in rmg.readings if r.r_type == 'ja_kun'] 
+                kunRomajiReadings = [self.yomiDict.toRomaji(r) for r in kunReadings]
+                onReadings = [r.value for r in rmg.readings if r.r_type == 'ja_on'] 
+                onRomajiReadings = [self.yomiDict.toRomaji(r) for r in onReadings]
 
-                joined = [f'{kanaReadings[i]} {(romajiReadings[i])}' for i in range(len(kanaReadings))]
-                out += f"{', '.join(joined)}"
+                kunList = [f'{kunReadings[i]} ({kunRomajiReadings[i]})' for i in range(len(kunReadings))]
+                onList = [f'{onReadings[i]} ({onRomajiReadings[i]})' for i in range(len(onReadings))]
+                out += f"Kunyomi: {', '.join(kunList)}\n\n" if kunList else ""
+                out += f"Onyomi: {', '.join(onList)}\n\n" if onList else ""
 
             out += f"\n\nMeanings: {', '.join(ch.meanings(english_only=True))}"
             
