@@ -93,13 +93,14 @@ class Frontend(QtWidgets.QStackedWidget):
         chars = self.yomiDict.getCharacters()
         names = self.yomiDict.getNames()
 
-        if not entries and not chars:
+        if not entries and not chars and not names:
             self.ocrPage.translation.setText("Uh oh! Yomi-mate couldn't find an entry for that selection.")
             return
 
-        out = self.formatDictionaryDisplay(entries)
-        out += self.formatCharactersDisplay(chars)
-        out += self.formatNamesDisplay(names)
+        out = ""
+        if entries: out += self.formatDictionaryDisplay(entries)
+        if chars: out += self.formatCharactersDisplay(chars)
+        if names: out += self.formatNamesDisplay(names)
         self.ocrPage.translation.setMarkdown(out)
 
     # format dictionary entries for better readibility
