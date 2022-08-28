@@ -133,7 +133,7 @@ class Frontend(QtWidgets.QStackedWidget):
     def formatCharactersDisplay(self, chars: list[Character]) -> str:
         out = ""
         for ch in chars:
-            out += f"# **{ch.literal}**\n"
+            out += f"**Kanji Details for {ch.literal}**\n\n"
             tags = []
             if ch.jlpt: tags.append(f"JLPT {ch.jlpt}")
             if ch.grade: tags.append(f"Jōyō Kanji taught in Grade {ch.grade}")
@@ -166,7 +166,7 @@ class Frontend(QtWidgets.QStackedWidget):
         for name in names:
             nameStr += f"{name.text(compact=True)}\n\n"
         if nameStr:
-            out += "# **Names**\n\n"
+            out += "**Names**\n\n"
             out += nameStr
         return out
 
