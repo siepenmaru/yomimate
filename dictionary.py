@@ -1,5 +1,6 @@
 import jamdict
 from jamdict.kanjidic2 import Character
+from jamdict.jmdict import JMDEntry
 from pykakasi import kakasi
 """
 HEAVILY utilizes the JamDict library
@@ -29,6 +30,12 @@ class YomiDict(jamdict.Jamdict):
         for entry in self.lookupResult.entries:
             entryDicts.append(entry.to_dict())
         return entryDicts
+    
+    def getNames(self) -> list[JMDEntry]:
+        names = []
+        for name in self.lookupResult.names:
+            names.append(name)
+        return names
 
     def getCharacters(self) -> list[Character]:
         chars = []
