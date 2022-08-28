@@ -3,6 +3,21 @@ An Optical Character Recognition driven dictionary. Inpired by the pop-up dictio
 
 Created as an entry for the UQ Computing Society Hackathon 2022
 
+## Requirements
+Python 3.10 or later
+
+## Setup
+In the project's root folder:
+```bash
+# ideally in a virtual environment
+pip install -r requirements.txt
+```
+
+Then, to run the application:
+```bash
+python ./frontend.py
+```
+
 # Acknowledgements
 ## Inspirations
 [Yomichan](https://github.com/FooSoft/yomichan)
