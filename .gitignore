@@ -130,3 +130,6 @@ dmypy.json
 
 # Sample Images
 images/
+
+# PyCharm project folder
+.idea/
