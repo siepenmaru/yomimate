@@ -1,7 +1,7 @@
 import sys
 from PyQt5 import QtGui, QtWidgets
 from ocr import YomimateOCR
-from dictionary import YomiDict, Character
+from dictionary import YomiDict, Character, JMDEntry
 import cv_highlight
 from widgets.OCRPage import OCRPage
 
@@ -91,6 +91,7 @@ class Frontend(QtWidgets.QStackedWidget):
 
         entries = self.yomiDict.getEntryDicts()
         chars = self.yomiDict.getCharacters()
+        names = self.yomiDict.getNames()
 
         if not entries and not chars:
             self.ocrPage.translation.setText("Uh oh! Yomi-mate couldn't find an entry for that selection.")
@@ -98,6 +99,7 @@ class Frontend(QtWidgets.QStackedWidget):
 
         out = self.formatDictionaryDisplay(entries)
         out += self.formatCharactersDisplay(chars)
+        out += self.formatNamesDisplay(names)
         self.ocrPage.translation.setMarkdown(out)
 
     # format dictionary entries for better readibility
@@ -155,6 +157,16 @@ class Frontend(QtWidgets.QStackedWidget):
             out += f"\n\nMeanings: {', '.join(ch.meanings(english_only=True))}"
             
             out += '\n\n' + 50*'-' + '\n\n'
+        return out
+    
+    def formatNamesDisplay(self, names: list[JMDEntry]):
+        out = ""
+        nameStr = ""
+        for name in names:
+            nameStr += f"{name.text(compact=True)}\n\n"
+        if nameStr:
+            out += "# **Names**\n\n"
+            out += nameStr
         return out
 
     def readImage(self, fileLocation: str) -> str:
