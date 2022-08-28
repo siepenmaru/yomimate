@@ -17,7 +17,7 @@ class Frontend(QtWidgets.QStackedWidget):
 
     def __init__(self):
         super().__init__()
-        self.reader = YomimateOCR('ja', False)
+        self.reader = YomimateOCR('ja', gpu=False, minConfidence=0.3)
         self.yomiDict = YomiDict()
         self.landing = Landing()
         self.ocrPage = OCRPage()
@@ -152,13 +152,23 @@ class Frontend(QtWidgets.QStackedWidget):
                 out += f"Kunyomi: {', '.join(kunList)}\n\n" if kunList else ""
                 out += f"Onyomi: {', '.join(onList)}\n\n" if onList else ""
 
-            out += f"\n\nMeanings: {', '.join(ch.meanings(english_only=True))}"
+            out += f"\n\nMeanings: {', '.join(ch.meanings(english_only=True))}\n\n"
             
-            out += '\n\n' + 50*'-' + '\n\n'
+            # relatedChars = self.yomiDict.getRadicalKanji(ch.literal)
+
+            # if relatedChars:
+            #     out += "Related Kanji: \n\n"
+            #     for rch in relatedChars:
+            #         out += f"- {rch[0]}: {rch[1]}\n\n"
+
+            # out += f"Related Kanji: {', '.join([ch.literal for ch in relatedChars])}"
+
+            out += 50*'-' + '\n\n'
         return out
 
     def readImage(self, fileLocation: str) -> str:
         self.reader.readImage(fileLocation)
+        self.reader.pruneResults()
         self.result = self.reader.getText()
         return self.result
 
@@ -177,6 +187,7 @@ if __name__ == "__main__":
     app = QtWidgets.QApplication(sys.argv)
 
     frontend = Frontend()
+    frontend.setWindowIcon(QtGui.QIcon('images/yomimate-circle.png'))
     frontend.resize(400,300)
     frontend.centerWindow()
     frontend.show()
