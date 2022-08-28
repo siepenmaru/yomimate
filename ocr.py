@@ -28,7 +28,7 @@ class YomimateOCR:
     def pruneResults(self) -> None:
         for entry in self.results:
             if entry[self.CONFIDENCE_INDEX] < self.minConfidence:
-                self.results.remove[entry]
+                self.results.remove(entry)
 
 if __name__ == '__main__':
     reader = easyocr.Reader(['ja'], gpu=False) # this needs to run only once to load the model into memory
