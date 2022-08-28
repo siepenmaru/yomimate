@@ -1,7 +1,26 @@
 # Yomi-mate
+**読み**
+
+よみ ⋅ yomi
+
+(noun)
+
+1. reading
+2. reading (of a kanji, esp. kun reading)​
+
+**Mate**
+
+*/meɪt/*
+
+1.  (colloquial, Britain, Australia, New Zealand, sometimes elsewhere in the Commonwealth) A friend
+
+---
+
 An Optical Character Recognition driven dictionary. Inpired by the pop-up dictionary browser extension Yomichan (https://github.com/FooSoft/yomichan)
 
 Created as an entry for the UQ Computing Society Hackathon 2022
+
+---
 
 ## Requirements
 Python 3.10 or later
