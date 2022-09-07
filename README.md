@@ -65,7 +65,7 @@ python ./frontend.py
 1. Unreliable GPU support
 1. UI could be nicer
 
-Frankly, this project is a bit of a mess. It's built on spaghetti hackathon code and is a hassle to get working for most users. I plan on reworking the entire thing to deal with these issues ~some~ time in the future.
+Frankly, this project is a bit of a mess. It's built on spaghetti hackathon code and is a hassle to get working for most users. I plan on reworking the entire thing to deal with these issues \~some\~ time in the future.
 
 ---
 # Acknowledgements
